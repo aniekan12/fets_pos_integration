@@ -1,6 +1,7 @@
 package com.example.fets_pos_integration
 
 import android.app.Activity
+import android.content.Intent
 import androidx.activity.ComponentActivity
 import androidx.activity.result.ActivityResultCallback
 import io.flutter.embedding.android.FlutterActivity
@@ -28,6 +29,11 @@ class MainActivity: FlutterActivity() {
 
 
             }
+
+        val intent = Intent("fets.pos.checkout")
+
+        //TODO: make a model to accept payments and pass it as an extra to the intent
+        startActivityForResult.launch(intent)
     }
 
         private fun <I, O> Activity.registerForActivityResult(
