@@ -7,6 +7,7 @@ import androidx.activity.result.ActivityResultCallback
 import io.flutter.embedding.android.FlutterActivity
 import androidx.activity.result.contract.ActivityResultContract
 import androidx.activity.result.contract.ActivityResultContracts
+import com.example.fets_pos_integration.models.FetsTransactionModel
 import io.flutter.embedding.engine.FlutterEngine
 import io.flutter.plugin.common.MethodChannel
 
@@ -32,7 +33,10 @@ class MainActivity: FlutterActivity() {
 
         val intent = Intent("fets.pos.checkout")
 
-        //TODO: make a model to accept payments and pass it as an extra to the intent
+        val paymentExtra = FetsTransactionModel(
+            amount = "100.00")
+
+        //TODO: parse json and add extra to the intent
         startActivityForResult.launch(intent)
     }
 
