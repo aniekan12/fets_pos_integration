@@ -13,6 +13,8 @@ import io.flutter.plugin.common.MethodChannel
 
 class MainActivity: FlutterActivity() {
     private val FETS_CHANNEL = "com.irecharge.fets";
+    private val FETS_INTENT = "fets.pos.checkout"
+
 
     override fun configureFlutterEngine(flutterEngine: FlutterEngine) {
         super.configureFlutterEngine(flutterEngine)
@@ -31,7 +33,7 @@ class MainActivity: FlutterActivity() {
 
             }
 
-        val intent = Intent("fets.pos.checkout")
+        val intent = Intent(FETS_INTENT)
 
         val paymentExtra = FetsTransactionModel(
             amount = "100.00")
