@@ -5,5 +5,5 @@ import androidx.annotation.Keep
 @Keep
 data class FetsTransactionModel(
     val amount : String,
-    val reference : String = ""
+    val reference : String?
 )

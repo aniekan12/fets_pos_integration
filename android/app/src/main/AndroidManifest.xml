@@ -30,5 +30,13 @@
         <meta-data
             android:name="flutterEmbedding"
             android:value="2" />
+
+       <receiver android:name=".receivers.FetsCheckoutBroadcastReceiver"
+           android:enabled="true"
+           android:exported="true">
+           <intent-filter>
+               <action android:name="fets.pos.checkout" />
+           </intent-filter>
+       </receiver>
     </application>
 </manifest>
