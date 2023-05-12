@@ -10,6 +10,8 @@ import androidx.activity.result.contract.ActivityResultContract
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.os.bundleOf
 import com.example.fets_pos_integration.models.FetsTransactionModel
+import com.example.fets_pos_integration.models.FetsTransactionResponse
+import com.google.gson.JsonObject
 import io.flutter.embedding.engine.FlutterEngine
 import io.flutter.plugin.common.MethodChannel
 
@@ -42,16 +44,22 @@ class MainActivity: FlutterActivity() {
 
     private fun makePayment(paymentModel: FetsTransactionModel){
         val startActivityForResult = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { activityResult ->
-            val response = activityResult?.data
+            if(activityResult.resultCode == RESULT_OK){
+                val response: FetsTransactionResponse? = activityResult.data?.extras?.get("data") as FetsTransactionResponse?
 
-            //TODO parse result as payment response
-            result.success(response?.data)
+                //Send the response back to flutter.
+                result.success(response?.toMap())
+            }
         }
 
+        val jsonObject = JsonObject()
+        jsonObject.addProperty("amount", paymentModel.amount)
+        jsonObject.addProperty("reference", paymentModel.reference)
+
+
         startActivityForResult.launch(Intent(FETS_INTENT)
-            .putExtra("data", bundleOf(Pair("amount", paymentModel.amount), Pair("reference", paymentModel.reference)))
-            .setAction(
-                FETS_INTENT)
+            .putExtra("data", jsonObject.toString())
+            .setAction(FETS_INTENT)
             .setPackage(IRECHARGE_PACKAGE_NAME)
             .addFlags(Intent.FLAG_INCLUDE_STOPPED_PACKAGES)
             .setComponent(ComponentName(IRECHARGE_PACKAGE_NAME, FETS_PACKAGE_NAME)))

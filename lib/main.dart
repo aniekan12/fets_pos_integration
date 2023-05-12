@@ -28,11 +28,15 @@ class PaymentPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Center(child: ElevatedButton(onPressed: () {
-        final paymentModel = PaymentModel(amount: "100.00", reference: "");
-
-        methodChannel.invokeMethod('cardPayment', paymentModel.toMap());
-      }, child: const Text("Make Payment")),),
+      body: Center(
+        child: ElevatedButton(
+            onPressed: () async {
+              final paymentModel = PaymentModel(amount: "100.00", reference: "");
+              FetsTransactionResponse? response = FetsTransactionResponse.fromJson((await methodChannel.invokeMethod('cardPayment', paymentModel.toMap())) as Map<String, dynamic>);
+              debugPrint('$response');
+            },
+            child: const Text("Make Payment")),
+      ),
     );
   }
 }
@@ -42,10 +46,72 @@ class PaymentModel {
   PaymentModel({this.amount, this.reference});
 
   Map<String, dynamic> toMap() {
-    return {
-      'amount': amount,
-      'reference': reference
-    };
+    return {'amount': amount, 'reference': reference};
   }
 }
 
+class FetsTransactionResponse {
+  String? tid,
+      mid,
+      issuer,
+      cardName,
+      pan,
+      exDate,
+      scheme,
+      stan,
+      responseCode,
+      payDate,
+      tellerNo,
+      tellerNoName,
+      rrn,
+      authCode,
+      channel,
+      type;
+  num? amount;
+
+  FetsTransactionResponse(
+      {this.tid,
+      this.mid,
+      this.issuer,
+      this.cardName,
+      this.pan,
+      this.exDate,
+      this.scheme,
+      this.stan,
+      this.responseCode,
+      this.payDate,
+      this.tellerNo,
+      this.tellerNoName,
+      this.rrn,
+      this.authCode,
+      this.channel,
+      this.type,
+      this.amount});
+
+
+  @override
+  String toString() {
+    return 'FetsTransactionResponse{tid: $tid, mid: $mid, issuer: $issuer, cardName: $cardName, pan: $pan, exDate: $exDate, scheme: $scheme, stan: $stan, responseCode: $responseCode, payDate: $payDate, tellerNo: $tellerNo, tellerNoName: $tellerNoName, rrn: $rrn, authCode: $authCode, channel: $channel, type: $type, amount: $amount}';
+  }
+
+  factory FetsTransactionResponse.fromJson(Map<String, dynamic> json) {
+    return FetsTransactionResponse(
+        tid: json['tid'],
+        mid: json['mid'],
+        amount: json['amount'],
+        issuer: json['issuer'],
+        cardName: json['cardName'],
+        pan: json['pan'],
+        exDate: json['exDate'],
+        scheme: json['scheme'],
+        stan: json['stan'],
+        responseCode: json['responseCode'],
+        payDate: json['payDate'],
+        tellerNo: json['tellerNo'],
+        tellerNoName: json['tellerNoName'],
+        rrn: json['rrn'],
+        authCode: json['authCode'],
+        channel: json['channel'],
+        type: json['type']);
+  }
+}
