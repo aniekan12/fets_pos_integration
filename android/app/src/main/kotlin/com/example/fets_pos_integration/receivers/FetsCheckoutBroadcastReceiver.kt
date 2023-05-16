@@ -3,17 +3,15 @@ package com.example.fets_pos_integration.receivers
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
-import android.util.Log
-import com.example.fets_pos_integration.ICallback
+import com.example.fets_pos_integration.interfaces.IFetsCallback
 
-var iCallback: ICallback? = null
+var iFetsCallback: IFetsCallback? = null
+
 
 class FetsCheckoutBroadcastReceiver : BroadcastReceiver() {
     override fun onReceive(ctx: Context?, intent: Intent) {
-        if(iCallback != null){
-            iCallback?.callBack(intent.extras?.get("data"))
-        } else {
-            Log.d("RESPONSE", "${intent.extras?.get("data")}")
+        if(iFetsCallback != null){
+            iFetsCallback?.callBack(intent.extras?.get("data"))
         }
     }
 }

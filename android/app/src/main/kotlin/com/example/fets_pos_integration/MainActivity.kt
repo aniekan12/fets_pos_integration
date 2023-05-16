@@ -2,17 +2,18 @@ package com.example.fets_pos_integration
 
 import android.content.ComponentName
 import android.content.Intent
+import com.example.fets_pos_integration.interfaces.IFetsCallback
 import com.example.fets_pos_integration.models.FetsTransactionModel
-import com.example.fets_pos_integration.receivers.iCallback
+import com.example.fets_pos_integration.receivers.iFetsCallback
 import com.google.gson.JsonObject
 import io.flutter.embedding.android.FlutterActivity
 import io.flutter.embedding.engine.FlutterEngine
 import io.flutter.plugin.common.MethodChannel
 
 
-class MainActivity: FlutterActivity(), ICallback {
+class MainActivity: FlutterActivity(), IFetsCallback {
     init {
-        iCallback = this
+        iFetsCallback = this
     }
 
     lateinit var result: MethodChannel.Result
@@ -41,7 +42,6 @@ class MainActivity: FlutterActivity(), ICallback {
         }
     }
 
-
     private fun makePayment(paymentModel: FetsTransactionModel){
         val jsonObject = JsonObject()
         jsonObject.addProperty("amount", paymentModel.amount)
@@ -61,8 +61,4 @@ class MainActivity: FlutterActivity(), ICallback {
     override fun callBack(data: Any?) {
         result.success(data)
     }
-}
-
-interface ICallback {
-    fun callBack(data: Any?)
 }
