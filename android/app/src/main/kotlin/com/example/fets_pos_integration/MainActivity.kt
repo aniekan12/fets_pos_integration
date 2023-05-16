@@ -2,9 +2,7 @@ package com.example.fets_pos_integration
 
 import android.content.ComponentName
 import android.content.Intent
-import android.util.Log
 import com.example.fets_pos_integration.models.FetsTransactionModel
-import com.example.fets_pos_integration.models.FetsTransactionResponse
 import com.example.fets_pos_integration.receivers.iCallback
 import com.google.gson.JsonObject
 import io.flutter.embedding.android.FlutterActivity
@@ -26,7 +24,6 @@ class MainActivity: FlutterActivity(), ICallback {
         private const val FETS_PACKAGE_NAME = "com.fets.infostrategypayment.Purchase"
         const val FETS_REQUEST_CODE = 1000
     }
-
 
     override fun configureFlutterEngine(flutterEngine: FlutterEngine) {
         super.configureFlutterEngine(flutterEngine)
