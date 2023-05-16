@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -16,26 +18,44 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: const PaymentPage(),
+      home: PaymentPage(),
     );
   }
 }
 
-class PaymentPage extends StatelessWidget {
-  const PaymentPage({Key? key}) : super(key: key);
+class PaymentPage extends StatefulWidget {
+  PaymentPage({Key? key}) : super(key: key);
+
+  @override
+  State<PaymentPage> createState() => _PaymentPageState();
+}
+
+class _PaymentPageState extends State<PaymentPage> {
   final methodChannel = const MethodChannel('com.irecharge.fets');
+  String? _responseCode;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Center(
-        child: ElevatedButton(
-            onPressed: () async {
-              final paymentModel = PaymentModel(amount: "100.00", reference: "");
-              FetsTransactionResponse? response = FetsTransactionResponse.fromJson((await methodChannel.invokeMethod('cardPayment', paymentModel.toMap())) as Map<String, dynamic>);
-              debugPrint('$response');
-            },
-            child: const Text("Make Payment")),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            ElevatedButton(
+                onPressed: () async {
+                  final paymentModel = PaymentModel(amount: "0.00", reference: "");
+                  final response = (await methodChannel.invokeMethod('cardPayment', paymentModel.toMap()));
+                  debugPrint('RAW_RESPONSE: $response');
+
+                  final data = FetsTransactionResponse.fromJson(jsonDecode(response) as Map<String, dynamic>);
+                  debugPrint('$data');
+                },
+                child: const Text("Make Payment")),
+
+            Text(_responseCode ?? '')
+          ],
+        ),
       ),
     );
   }
@@ -96,8 +116,8 @@ class FetsTransactionResponse {
 
   factory FetsTransactionResponse.fromJson(Map<String, dynamic> json) {
     return FetsTransactionResponse(
-        tid: json['tid'],
-        mid: json['mid'],
+        tid: json['T/ID'],
+        mid: json['M/ID:'],
         amount: json['amount'],
         issuer: json['issuer'],
         cardName: json['cardName'],
