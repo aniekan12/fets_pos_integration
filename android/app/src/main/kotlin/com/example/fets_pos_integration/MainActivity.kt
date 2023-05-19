@@ -12,18 +12,10 @@ import io.flutter.plugin.common.MethodChannel
 
 
 class MainActivity: FlutterActivity(), IFetsCallback {
-    init {
-        iFetsCallback = this
-    }
-
     lateinit var result: MethodChannel.Result
 
-    companion object{
-        private const val FETS_CHANNEL = "com.irecharge.fets"
-        private const val FETS_INTENT = "fets.pos.checkout"
-        private const val IRECHARGE_PACKAGE_NAME = "com.fets.infostrategypayment"
-        private const val FETS_PACKAGE_NAME = "com.fets.infostrategypayment.Purchase"
-        const val FETS_REQUEST_CODE = 1000
+    init {
+        iFetsCallback = this
     }
 
     override fun configureFlutterEngine(flutterEngine: FlutterEngine) {
@@ -60,5 +52,13 @@ class MainActivity: FlutterActivity(), IFetsCallback {
 
     override fun callBack(data: Any?) {
         result.success(data)
+    }
+
+    companion object{
+        private const val FETS_CHANNEL = "com.irecharge.fets"
+        private const val FETS_INTENT = "fets.pos.checkout"
+        private const val IRECHARGE_PACKAGE_NAME = "com.fets.infostrategypayment"
+        private const val FETS_PACKAGE_NAME = "com.fets.infostrategypayment.Purchase"
+        const val FETS_REQUEST_CODE = 1000
     }
 }
